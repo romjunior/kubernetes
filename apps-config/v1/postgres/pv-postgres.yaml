@@ -3,12 +3,12 @@ kind: PersistentVolume
 metadata:
   name: pv-postgres
   labels:
-    type: local
+    app: postgres
 spec:
   storageClassName: manual
   capacity:
-    storage: 10Gi
+    storage: 20Gi
   accessModes:
    - ReadWriteOnce
   hostPath:
-    path: "/data/teste"
+    path: /data/sgdb/postgres/data

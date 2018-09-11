@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    spec:
+      volumes:
+       - name: pv-post
+         persistentVolumeClaim:
+           claimName: pvc-postgres
+      containers:
+       - name: postgres
+         image: postgres:
+    
