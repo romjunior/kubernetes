@@ -1,0 +1,39 @@
+1) Update registry configuration file (config.yml) and restart registry
+
+storage:
+    delete:
+        enabled: true
+OU
+ ENV = REGISTRY_STORAGE_DELETE_ENABLED=true
+
+2) Get tags list
+
+GET ://<registry_host>/v2/<repo_name>/tags/list
+
+3) Get manifest for selected tag
+
+GET ://<registry_host>/v2/<repo_name>/manifests/<tag_name>
+
+curl -v -sSL -k -H 'Accept: application/vnd.docker.distribution.manifest.v2+json' -X GET https://<registry_host>/v2/<repo_name>/manifests/<tag_name>
+
+
+4) Copy digest hash from response header
+
+Docker-Content-Digest: <digest_hash>
+
+5) Delete manifest (soft delete). This request only marks image tag as deleted and doesn't delete files from file system. If you want to delete data from file system, run this step and go to the next step
+
+DELETE ://<registry_host>/v2/<repo_name>/manifests/<digest_hash>
+
+curl -v -sSL -k -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -X  DELETE https://<registry_host>/v2/<repo_name>/manifests/<digest_hash>
+
+
+Note! You must set headers for request - Accept: application/vnd.docker.distribution.manifest.v2+json
+
+6) Delete image data from file system
+
+Run command from the host machine:
+
+docker exec -it <registry_container_id> bin/registry garbage-collect <path_to_registry_config>
+
+Note! Usually, <path_to_registry_config>=/etc/docker/registry/config.yml

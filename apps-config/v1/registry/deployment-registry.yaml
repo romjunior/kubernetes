@@ -25,6 +25,11 @@ spec:
        - name: registry
          image: registry:2
          env:
+          - name: REGISTRY_STORAGE_DELETE_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry
+                key: registry.del
           - name: REGISTRY_HTTP_ADDR
             valueFrom:
               configMapKeyRef:
