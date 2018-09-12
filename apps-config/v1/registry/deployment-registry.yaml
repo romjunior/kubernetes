@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  labels:
+    app: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      volumes:
+       - name: pv-res
+         persistentVolumeClaim:
+           claimName: pvc-registry
+       - name: s-res
+         secret:
+           secretName: s-registry
+      containers:
+       - name: registry
+         image: registry:2
+         env:
+          - name: REGISTRY_HTTP_ADDR
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry
+                key: registry.addr
+          - name: REGISTRY_HTTP_TLS_CERTIFICATE
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry
+                key: registry.tls.cert
+          - name: REGISTRY_HTTP_TLS_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry
+                key: registry.tls.key
+         volumeMounts:
+          - mountPath: /var/lib/registry
+            name: pv-res
+          - mountPath: /certs
+            name: s-res
+            readOnly: true
+         ports:
+          - containerPort: 443

@@ -1,0 +1,9 @@
+openssl req \
+  -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key \
+  -x509 -days 365 -out certs/domain.crt
+
+
+
+k8s create secret
+
+kubectl create secret generic s-registry --from-file=domain.crt=certs/domain.crt --from-file=domain.key=certs/domain.key

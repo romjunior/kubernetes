@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-registry
+  namespace: default
+data:
+  registry.addr: 0.0.0.0:443
+  registry.tls.cert: "/certs/domain.crt"
+  registry.tls.key: "/certs/domain.key"
