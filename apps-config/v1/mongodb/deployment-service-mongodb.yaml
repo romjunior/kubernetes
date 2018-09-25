@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      volumes:
+       - name: pv-mongo
+         persistentVolumeClaim:
+           claimName: pvc-mongodb
+      containers:
+       - name: mongodb
+         image: mongo:3
+         env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: s-mongodb
+                key: user
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: s-mongodb
+                key: password
+         volumeMounts:
+          - name: pv-mongo
+            mountPath: /data/db
+         ports:
+          - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  selector:
+    app: mongodb
+  type: NodePort
+  ports:
+   - name: 'http1'
+     port: 8081
+     targetPort: 8081
+     nodePort: 30011
+   - name: 'http2'
+     port: 27017
+     targetPort: 27017
+     nodePort: 30012
