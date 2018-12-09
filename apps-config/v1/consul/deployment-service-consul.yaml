@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul
+  labels:
+    app: consul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      volumes:
+       - name: pv-con
+         persistentVolumeClaim:
+           claimName: pvc-consul
+      containers:
+       - name: consul
+         image: 192.168.49.167:30003/consul:v1
+         env:
+          - name: ADVADDR
+            valueFrom:
+              configMapKeyRef:
+                name: cm-consul
+                key: ADVADDR
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  labels:
+    app: consul
+spec:
+  selector:
+    app: consul
+  type: NodePort
+  ports:
+   - name: 'http1'
+     port: 8300
+     targetPort: 8300
+     nodePort: 30020
+   - name: 'http2'
+     port: 8500
+     targetPort: 8500
+     nodePort: 30021
+   - name: 'http3'
+     port: 8600
+     targetPort: 8600
+     nodePort: 30022

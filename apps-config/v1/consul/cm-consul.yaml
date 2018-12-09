@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-consul
+  namespace: default
+  labels:
+    type: configMap
+data:
+  ADVADDR: "192.168.49.167"
+  BINDADDR: "0.0.0.0"
+  CLIENTADDR: "0.0.0.0"
+  NUMBERCONSUL: "1"
+  NODENAME: "agent-one"
+  DATADIR: "/tmp/consul"
