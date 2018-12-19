@@ -1,1 +1,1 @@
-kubectl create configmap cm-vault --from-env-file=config.hcl
+kubectl create configmap cm-vault --from-file=config.hcl
