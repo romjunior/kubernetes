@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault
+  labels:
+    app: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      volumes:
+       - name: pv-vau
+         persistentVolumeClaim:
+           claimName: pvc-vault
+       - name: config-m-vault
+         configMap:
+           name: cm-vault
+      containers:
+       - name: vault
+         image: 192.168.49.167:30003/vault:v1
+         volumeMounts:
+          - name: config-m-vault
+            mountPath: /home/vault/config
+          - name: pv-vau
+            mountPath: /home/vault/data
+         
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault
+  labels:
+    app: vault
+spec:
+  selector:
+    app: vault
+  type: NodePort
+  ports:
+   - name: 'http'
+     port: 8200
+     targetPort: 8200
+     nodePort: 30023

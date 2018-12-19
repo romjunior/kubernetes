@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-vault
+  labels:
+    app: vault
+spec:
+  volumeName: pv-vault
+  storageClassName: manual
+  accessModes:
+   - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
