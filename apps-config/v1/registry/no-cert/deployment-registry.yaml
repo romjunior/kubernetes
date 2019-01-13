@@ -18,6 +18,9 @@ spec:
        - name: pv-res
          persistentVolumeClaim:
            claimName: pvc-registry
+       - name: tz-config
+         persistentVolumeClaim:
+           claimName: pvc-tz
       containers:
        - name: registry
          image: registry:2
@@ -42,5 +45,7 @@ spec:
          volumeMounts:
           - mountPath: /var/lib/registry
             name: pv-res
+          - mountPath: /etc/localtime
+            name: tz-config
          ports:
           - containerPort: 5000

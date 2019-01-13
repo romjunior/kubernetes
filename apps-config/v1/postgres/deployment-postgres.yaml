@@ -18,6 +18,9 @@ spec:
        - name: pv-post
          persistentVolumeClaim:
            claimName: pvc-postgres
+       - name: pvc-zone
+         persistentVolumeClaim:
+           claimName: pvc-tz
       containers:
       - name: postgres
         image: postgres:10.5-alpine
@@ -30,5 +33,14 @@ spec:
         volumeMounts:
          - mountPath: /var/lib/postgresql/data
            name: pv-post
+         - mountPath: /etc/localtime
+           name: pvc-zone
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+          limits:
+            cpu: "2000m"
+            memory: "300Mi"
         ports:
         - containerPort: 5432
