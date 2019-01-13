@@ -1,0 +1,11 @@
+Edit the daemon.json file, whose default location is /etc/docker/daemon.json on Linux or 
+C:\ProgramData\docker\config\daemon.json on Windows Server. If you use Docker for Mac or Docker for Windows, 
+click the Docker icon, choose Preferences, and choose +Daemon.
+
+If the daemon.json file does not exist, create it. 
+Assuming there are no other settings in the file, 
+it should have the following contents:
+
+{
+  "insecure-registries" : ["myregistrydomain.com:5000"]
+}

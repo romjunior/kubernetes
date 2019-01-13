@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-registry
+  namespace: default
+data:
+  registry.del: 'true'
+  registry.addr: 0.0.0.0:5000
