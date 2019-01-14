@@ -35,12 +35,5 @@ spec:
            name: pv-post
          - mountPath: /etc/localtime
            name: pvc-zone
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "100Mi"
-          limits:
-            cpu: "2000m"
-            memory: "300Mi"
         ports:
         - containerPort: 5432
