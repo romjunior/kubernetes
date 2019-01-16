@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      volumes:
+       - name: pv-rab
+         persistentVolumeClaim:
+           claimName: pvc-rabbitmq
+       - name: tz-config
+         persistentVolumeClaim:
+           claimName: pvc-tz
+      containers:
+       - name: rabbitmq
+         image: rabbitmq:3.7.8-management
+         env:
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: s-rabbitmq
+                key: user
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: s-rabbitmq
+                key: password
+         resources:
+           requests:
+             cpu: "100m"
+             memory: "100Mi"
+           limits:
+             cpu: "250m"
+             memory: "400Mi"
+         volumeMounts:
+          - mountPath: /var/lib/rabbitmq
+            name: pv-rab
+          - mountPath: /etc/localtime
+            name: tz-config
+         ports:
+          - name: http
+            containerPort: 15672
+          - name: amqp
+            containerPort: 5672
+          - name: cluster
+            containerPort: 25672
