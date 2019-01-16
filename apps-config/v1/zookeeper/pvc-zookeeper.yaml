@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-zookeeper
+  labels:
+    app: zookeeper
+spec:
+  volumeName: pv-zookeeper
+  storageClassName: manual
+  accessModes:
+   - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi

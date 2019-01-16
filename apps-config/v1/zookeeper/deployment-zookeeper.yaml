@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  labels:
+    app: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      volumes:
+       - name: pv-zoo
+         persistentVolumeClaim:
+           claimName: pvc-zookeeper
+       - name: tz-config
+         persistentVolumeClaim:
+           claimName: pvc-tz
+      containers:
+       - name: zookeeper
+         image: 192.168.1.180:30002/zookeeper:3-alpine
+         imagePullPolicy: Always
+         resources:
+           requests:
+             cpu: "50m"
+             memory: "50Mi"
+           limits:
+             cpu: "150m"
+             memory: "120Mi"
+         volumeMounts:
+          - mountPath: /var/lib/zookeeper
+            name: pv-zoo
+          - mountPath: /etc/localtime
+            name: tz-config
+         ports:
+          - containerPort: 2181
