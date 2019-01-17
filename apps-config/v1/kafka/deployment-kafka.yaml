@@ -46,7 +46,7 @@ spec:
             name: pv-kaf
           - mountPath: /etc/localtime
             name: tz-config
-          - mountPath: /kafka/custom/server.properties
+          - mountPath: /kafka/custom
             name: config-file-kafka
          ports:
           - containerPort: 9092
