@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  labels:
+    app: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      volumes:
+       - name: pv-kaf
+         persistentVolumeClaim:
+           claimName: pvc-kafka
+       - name: tz-config
+         persistentVolumeClaim:
+           claimName: pvc-tz
+       - name: config-file-kafka
+         configMap:
+           name: cm-file-kafka
+      containers:
+       - name: kafka
+         image: 192.168.1.180:30002/kafka:2-alpine
+         imagePullPolicy: Always
+         env:
+          - name: CONFIGPATH
+            valueFrom:
+              configMapKeyRef:
+                name: cm-kafka
+                key: CONFIGPATH
+         resources:
+           requests:
+             cpu: "100m"
+             memory: "250Mi"
+           limits:
+             cpu: "300m"
+             memory: "512Mi"
+         volumeMounts:
+          - mountPath: /tmp/kafka-logs
+            name: pv-kaf
+          - mountPath: /etc/localtime
+            name: tz-config
+          - mountPath: /kafka/custom/server.properties
+            name: config-file-kafka
+         ports:
+          - containerPort: 9092

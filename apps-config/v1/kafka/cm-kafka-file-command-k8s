@@ -1,0 +1,1 @@
+kubectl create configmap cm-file-kafka --from-file=server.properties
