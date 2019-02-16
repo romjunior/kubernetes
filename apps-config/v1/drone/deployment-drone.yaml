@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drone
+  labels:
+    app: drone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drone
+  template:
+    metadata:
+      labels:
+        app: drone
+    spec:
+      volumes:
+       - name: pv-drone
+         persistentVolumeClaim:
+           claimName: pvc-drone
+       - name: pvc-zone
+         persistentVolumeClaim:
+           claimName: pvc-tz
+      containers:
+       - name: drone
+         image: drone/drone:1.0.0-rc.5
+         env:
+          - name: DRONE_KUBERNETES_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_KUBERNETES_ENABLED
+          - name: DRONE_KUBERNETES_NAMESPACE
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_KUBERNETES_NAMESPACE
+          - name: DRONE_GITHUB_SERVER
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_GITHUB_SERVER
+          - name: DRONE_GITHUB_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_GITHUB_CLIENT_ID
+          - name: DRONE_GITHUB_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_GITHUB_CLIENT_SECRET
+          - name: DRONE_RPC_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_RPC_SECRET
+          - name: DRONE_SERVER_HOST
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_SERVER_HOST
+          - name: DRONE_SERVER_PROTO
+            valueFrom:
+              secretKeyRef:
+                name: s-drone
+                key: DRONE_SERVER_PROTO
+         volumeMounts:
+          - name: pv-drone
+            mountPath: /var/lib/drone
+          - name: pvc-zone
+            mountPath: /etc/localtime
+         ports:
+          - containerPort: 27017
