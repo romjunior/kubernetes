@@ -65,6 +65,13 @@ spec:
               secretKeyRef:
                 name: s-drone
                 key: droneServerProto
+         resources:
+           requests:
+             cpu: "100m"
+             memory: "250Mi"
+           limits:
+             cpu: "300m"
+             memory: "512Mi"
          volumeMounts:
           - name: pv-drone
             mountPath: /var/lib/drone
