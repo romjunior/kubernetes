@@ -29,46 +29,49 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_KUBERNETES_ENABLED
+                key: droneKubenetesEnabled
           - name: DRONE_KUBERNETES_NAMESPACE
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_KUBERNETES_NAMESPACE
+                key: droneKubernetesNamespace
           - name: DRONE_GITHUB_SERVER
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_GITHUB_SERVER
+                key: droneGithubServer
           - name: DRONE_GITHUB_CLIENT_ID
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_GITHUB_CLIENT_ID
+                key: droneGithubClientId
           - name: DRONE_GITHUB_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_GITHUB_CLIENT_SECRET
+                key: droneGithubClientSecret
           - name: DRONE_RPC_SECRET
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_RPC_SECRET
+                key: droneRpcSecret
           - name: DRONE_SERVER_HOST
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_SERVER_HOST
+                key: droneServerHost
           - name: DRONE_SERVER_PROTO
             valueFrom:
               secretKeyRef:
                 name: s-drone
-                key: DRONE_SERVER_PROTO
+                key: droneServerProto
          volumeMounts:
           - name: pv-drone
             mountPath: /var/lib/drone
           - name: pvc-zone
             mountPath: /etc/localtime
          ports:
-          - containerPort: 27017
+          - name: 'http'
+            containerPort: 80
+          - name: 'https'
+            containerPort: 443
