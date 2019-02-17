@@ -4,5 +4,5 @@ metadata:
   name: cm-registry-ui
 data:
   registry.del: 'true'
-  registry.addr: 'http://192.168.1.180:30003'
+  registry.addr: 'http://192.168.1.180:30002'
   registry.title: 'Tiger Registry'
