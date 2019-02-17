@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-ui
+  labels:
+    app: registry-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-ui
+  template:
+    metadata:
+      labels:
+        app: registry-ui
+    spec:
+      volumes:
+       - name: tz-config
+         persistentVolumeClaim:
+           claimName: pvc-tz
+      containers:
+       - name: registry-ui
+         image: joxit/docker-registry-ui:static
+         env:
+          - name: DELETE_IMAGES
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry-ui
+                key: registry.del
+          - name: REGISTRY_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry-ui
+                key: registry.addr
+          - name: REGISTRY_TITLE
+            valueFrom:
+              configMapKeyRef:
+                name: cm-registry-ui
+                key: registry.title
+         resources:
+           requests:
+             cpu: "10m"
+             memory: "50Mi"
+           limits:
+             cpu: "50m"
+             memory: "100Mi"
+         volumeMounts:
+          - mountPath: /etc/localtime
+            name: tz-config
+         ports:
+          - containerPort: 80
