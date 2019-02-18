@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-manager
+  labels:
+    app: kafka-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-manager
+  template:
+    metadata:
+      labels:
+        app: kafka-manager
+    spec:
+      volumes:
+       - name: tz-config
+         persistentVolumeClaim:
+           claimName: pvc-tz
+      containers:
+       - name: kafka-manager
+         image: sheepkiller/kafka-manager:alpine
+         env:
+          - name: ZK_HOSTS
+            valueFrom:
+              configMapKeyRef:
+                name: cm-kafka-manager
+                key: zkHosts
+         resources:
+           requests:
+             cpu: "50m"
+             memory: "100Mi"
+           limits:
+             cpu: "150m"
+             memory: "250Mi"
+         volumeMounts:
+          - mountPath: /etc/localtime
+            name: tz-config
+         ports:
+          - containerPort: 9000
