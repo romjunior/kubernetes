@@ -21,7 +21,6 @@ spec:
       containers:
        - name: kafka-manager
          image: hlebalbau/kafka-manager:stable
-         command: ["-Dpidfile.path=/dev/null"]
          env:
           - name: ZK_HOSTS
             valueFrom:
