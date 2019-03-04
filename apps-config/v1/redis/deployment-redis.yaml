@@ -26,6 +26,13 @@ spec:
         image: redis:5.0.3-alpine
         command: ["redis-server"]
         args: ["--appendonly", "yes"]
+        resources:
+           requests:
+             cpu: "50m"
+             memory: "50Mi"
+           limits:
+             cpu: "150m"
+             memory: "100Mi"
         volumeMounts:
          - mountPath: /data
            name: pv-redis
