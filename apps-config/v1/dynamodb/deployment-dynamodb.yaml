@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamodb
+  labels:
+    app: dynamodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dynamodb
+  template:
+    metadata:
+      labels:
+        app: dynamodb
+    spec:
+      volumes:
+       - name: pv-dynamo
+         persistentVolumeClaim:
+           claimName: pvc-dynamodb
+       - name: pvc-zone
+         persistentVolumeClaim:
+           claimName: pvc-tz
+      containers:
+       - name: dynamodb
+         image: 192.168.1.180:30002/dynamodb:latest
+         resources:
+           requests:
+             cpu: "100m"
+             memory: "100Mi"
+           limits:
+             cpu: "250m"
+             memory: "250Mi"
+         volumeMounts:
+          - name: pv-dynamo
+            mountPath: /storage
+          - name: pvc-zone
+            mountPath: /etc/localtime
+         ports:
+          - containerPort: 8000
