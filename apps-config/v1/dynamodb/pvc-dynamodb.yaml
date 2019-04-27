@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-dynamodb
+  labels:
+    app: dynamodb
+spec:
+  volumeName: pv-dynamodb
+  storageClassName: manual
+  accessModes:
+   - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
