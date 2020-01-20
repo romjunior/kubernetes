@@ -33,3 +33,9 @@ Pode usar o comando explain, ex:
 ```
 kubectl explain pods.spec
 ```
+
+### Três Ferramentas importantes(Trinity os Tooling):
+
+* YAML
+* Vim - Mas disse que pode mudar
+* Comandos Bash
