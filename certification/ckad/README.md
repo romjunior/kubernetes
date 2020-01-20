@@ -116,16 +116,16 @@ kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-pod.ya
 
 Provávelmente o objeto mais importante.
 
-![One of Many in Pods](https://github.com/romjunior/kubernetes/tree/master/certification/ckad/images/pods-1.png)
+![One of Many in Pods](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/pods-1.png)
 
 
 Fluxo de criação de um pod:
 
-![Pod Creation Control](https://github.com/romjunior/kubernetes/tree/master/certification/ckad/images/pod-flow.png)
+![Pod Creation Control](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/pod-flow.png)
 
 Ciclo de vida de um pod:
 
-![Pod Lifecycle](https://github.com/romjunior/kubernetes/tree/master/certification/ckad/images/pod-lifecycle.png)
+![Pod Lifecycle](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/pod-lifecycle.png)
 
 ### Inspecionando Pods
 
