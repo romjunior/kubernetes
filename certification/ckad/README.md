@@ -40,7 +40,7 @@ kubectl explain pods.spec
 * Vim - Mas disse que pode mudar
 * Comandos Bash
 
-## Módulo 1
+## Módulo 1: Básico
 
 ### Kubernetes Object Struture
 
@@ -207,3 +207,165 @@ kubectl get po <PodName> -o wide
 ```
 
 * Quando criar um pod, pode adicionar o `--rm` para deletar o pod quando estiver terminado
+
+## Módulo 2: Configuração
+
+### Configuração centralizada
+
+Pode utilizar configMaps e Secrets. Diferença entre os dois é que o o Secret encoda(não criptografa) os dados em base64.
+
+![Pod Config](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/pod-config.png)
+
+### ConfigMaps
+
+* Rápido, Fácil e flexível, pode apontar para fontes diferentes.
+
+Imperativo
+```
+# Literal values
+kubectl create configmap db-config --from-literal=db=staging
+# single file with env vars
+kubectl create configmap db-config --from-env-file=config.env
+# file or directory
+kubectl create configmap db-config --from-file=config.txt
+```
+
+Declarativo
+```
+apiVersion: v1
+data:
+  db: staging
+  username: jdoe
+kind: ConfigMap
+metadata:
+  name: db-config
+```
+
+![Mount Config-Map](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/mount-cm.png)
+
+Montando ConfigMap como env. var. de um Pod.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+spec:
+  containers:
+   - image: nginx
+     name: backend
+     envFrom:
+      - configMapRef:
+          name: db-config
+
+```
+ou declarando chaves explícitas, caso os nomes forem diferentes:
+```
+spec:
+  containers:
+   - image: nginx
+     name: backend
+     env:
+      - name: CONFIG_DB
+     valueFrom:
+       configMapKeyRef:
+          name: db-config
+          key: dbConfig
+```
+
+Montando ConfigMap como Volume em um Pod.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+spec:
+  containers:
+   - image: nginx
+     name: backend
+     volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+   - name: config-volume
+     configMap:
+       name: db-config
+```
+
+**OBS:** Se você montar um ConfigMap como key/value, a key se torna um arquivo e o value seu conteúdo.
+
+### Secrets
+
+* Utilização similar ao ConfigMaps
+* Com adição do tipo de secret, nesse caso é `generic`
+
+Imperativo
+```
+#Literal Values
+kubectl create secret generic db-creds --from-literal=pwd=secret
+kubectl create secret generic db-creds --from-env-file=creds.env
+# file or directory
+kubectl create secret generic db-creds --from-file=creds.txt
+```
+
+Declarativa:
+
+* Valores devem ser encodados manualmente(base64): `echo -n 'value' | base64`
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  pwd: <valueInBase64>
+```
+
+Montando o Secret como  Env:
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+spec:
+  containers:
+   - image: nginx
+     name: backend
+     envFrom:
+      - secretRef:
+          name: mysecret
+
+```
+ou declarando chaves explícitas, caso os nomes forem diferentes:
+```
+spec:
+  containers:
+   - image: nginx
+     name: backend
+     env:
+      - name: SECRET
+     valueFrom:
+       secretKeyRef:
+          name: mysecret
+          key: secretKey
+```
+
+Montando o Secret como Volume:
+```apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+spec:
+  containers:
+   - image: nginx
+     name: backend
+     volumeMounts:
+      - name: secret-volume
+        mountPath: /etc/secret
+  volumes:
+   - name: secret-volume
+     secret:
+       secretName: mysecret
+```
