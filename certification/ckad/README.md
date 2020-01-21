@@ -54,7 +54,7 @@ Status| estado atual
 
 exemplo:
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -156,7 +156,7 @@ status:
 
 * Pode injetar via runtime
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -174,7 +174,7 @@ spec:
 
 * Executar um comando dentro de um container
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -231,7 +231,7 @@ kubectl create configmap db-config --from-file=config.txt
 ```
 
 Declarativo
-```
+```yaml
 apiVersion: v1
 data:
   db: staging
@@ -245,7 +245,7 @@ metadata:
 
 Montando ConfigMap como env. var. de um Pod.
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -260,7 +260,7 @@ spec:
 
 ```
 ou declarando chaves explícitas, caso os nomes forem diferentes:
-```
+```yaml
 spec:
   containers:
    - image: nginx
@@ -275,7 +275,7 @@ spec:
 
 Montando ConfigMap como Volume em um Pod.
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -312,7 +312,7 @@ kubectl create secret generic db-creds --from-file=creds.txt
 Declarativa:
 
 * Valores devem ser encodados manualmente(base64): `echo -n 'value' | base64`
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -324,7 +324,7 @@ data:
 
 Montando o Secret como  Env:
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -339,7 +339,7 @@ spec:
 
 ```
 ou declarando chaves explícitas, caso os nomes forem diferentes:
-```
+```yaml
 spec:
   containers:
    - image: nginx
@@ -353,7 +353,8 @@ spec:
 ```
 
 Montando o Secret como Volume:
-```apiVersion: v1
+```yaml
+apiVersion: v1
 kind: Pod
 metadata:
   name: backend
@@ -368,4 +369,64 @@ spec:
    - name: secret-volume
      secret:
        secretName: mysecret
+```
+
+### Security Contexts
+
+![Security Contexts](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/security-context.png)
+
+Definindo um Security Context
+
+Pod Level vs Container Level:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secured-pod
+spec:
+  securityContext:  #Pod Level - embaixo do spec, se aplica a todos os containers
+    runAsUser: 1000
+  containers:
+   - securityContext: #Container Level - define de cada container
+     runAsGroup: 3000
+```
+
+### Definindo limite de recursos
+
+* Define número de Pods, até por namespace.
+* Define limite de CPU e Memória, até por namespace.
+
+![Resource Limits](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/resource-limits.png)
+
+Criando um **Resource Quota**
+
+Definição no nível do Namespace
+
+```yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: app
+spec:
+  hard:
+    pods: "2"
+    requests.cpu: "2"
+    requests.memory: "500m"
+```
+
+Definição no nível do Pod
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+   - image: nginx
+     name: mypod
+     resources:    #aqui é onde se define os limites
+       requests:
+         cpu: "0.5"
+         memory: "200m"
 ```
