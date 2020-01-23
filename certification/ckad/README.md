@@ -430,3 +430,16 @@ spec:
          cpu: "0.5"
          memory: "200m"
 ```
+
+### Service Accounts
+
+* Provém identidade para processos rodando em um Pod
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+spec:
+  serviceAccountName: myserviceaccount # o service account
+```
