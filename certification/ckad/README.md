@@ -443,3 +443,36 @@ metadata:
 spec:
   serviceAccountName: myserviceaccount # o service account
 ```
+
+## Modulo 4: Multi-Container Pods
+
+* ciclo de vida e recursos compartilhados.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container
+spec:
+  containers:
+   - image: nginx
+     name: container1
+   - image: nginx
+     name: container2
+```
+
+Para apontar para um container dentro do Pod, mostre qual container(--container ou -c), ex:
+
+```
+kubectl logs multi-container --container=container1
+```
+
+### Multi-Container Patterns
+
+*Para o exame*: vai precisar saber no alto nível.(Livro Kubernetes Patterns by O'Reilly)
+
+Patterns:
+ * Init Container
+ * Sidecar
+   * Adapter
+   * Ambassador
