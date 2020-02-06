@@ -576,4 +576,46 @@ O container principal geralmente é o primeiro que deve ser listado.
 * Especialização do *Sidecar pattern*
 * Proxy para a aplicação principal do Pod.(Autentição, Autorização e etc...)
 
-## Modulo 5: MObservabilidade
+## Modulo 5: Observabilidade
+
+Como o kubernetes sabe se o container está em pé e executando?
+
+*Probes* podem detectar e corrigir falhas. Podemos fazer isso de 3 jeitos.
+
+* HTTP(GET) Connection
+* Command line
+* TCP Connection
+
+Existem dois tipos de *Probes*
+
+* Readiness
+* Liveness
+
+#### Readiness Probes
+
+Responde a pergunta: a aplicação está pronta para servir requests?
+
+![Readiness Probe](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/readiness-probe.png)
+
+
+HTTP Probes são muito úteis para aplicações web.
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-app
+spec:
+  containers:
+   - name: web-app
+     image: eshop:4.6.3
+     readinessProbe:
+       httpGet:
+         path: /
+         port: 8080
+       initialDelaySeconds: 5
+       periodSeconds: 2
+```
+
+**initialDelaySeconds**: tempo que vai esperar para iniciar o *probe*. Usado por quê as aplicações demoram um tempo para iniciar, é bom começar a checar quando ela estiver pronta.
+
+**periodSeconds**: Período que o *probe* vai esperar entre as checagens.
