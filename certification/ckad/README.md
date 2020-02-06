@@ -575,3 +575,5 @@ O container principal geralmente é o primeiro que deve ser listado.
 
 * Especialização do *Sidecar pattern*
 * Proxy para a aplicação principal do Pod.(Autentição, Autorização e etc...)
+
+## Modulo 5: MObservabilidade
