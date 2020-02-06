@@ -565,3 +565,13 @@ spec:
 ![Sidecar Example](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/sidecar-example.png)
 
 O container principal geralmente é o primeiro que deve ser listado.
+
+#### Adapter Pattern
+
+* Especialização do *Sidecar pattern*
+* Padroniza e normaliza a saida da aplicação para ser lida por serviços externos.
+
+#### Ambassador Pattern
+
+* Especialização do *Sidecar pattern*
+* Proxy para a aplicação principal do Pod.(Autentição, Autorização e etc...)
