@@ -672,3 +672,102 @@ kubectl logs abc
 ```
 
 ## Modulo 6: Pod Design
+
+#### Labels
+
+* São essenciais para consultar, filtrar e organizar os objetos do k8s
+* São definidas na seção de `metadata` do k8s do Object Definition
+
+```yaml
+apiVersion: v1
+kind: POd
+metadata:
+  name: pod1
+  labels:
+    tier: backend
+    env: prod
+    app: miracle
+spec:
+...
+```
+
+Consultar as labels:
+```
+kubectl get pods --show-labels
+```
+
+#### Selecionando as labels
+
+Podemos selecionar pelo CLI ou via `spec.selector`
+
+Selecionando via CLI, pode selecionar via *equality-based* e via *set-based*
+
+Exemplo: Onde o tier seja front E o env seja dev
+```
+kubectl get pods -l(--selector) tier=front,env=dev --show-labels
+```
+
+Exemplo: se possui a label version
+```
+kubectl get pods -l(--selector) version --show-labels
+```
+
+Exemplo: Onde o tier for back OU front E o env seja dev
+```
+kubectl get pods -l(--selector) 'tier in (front,back),env=dev' --show-labels
+```
+
+Selecionando via YAML
+
+Equality Exemplo:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  ...
+spec:
+  selector:
+    tier: front
+    env: dev
+```
+
+Equality e set Exemplo:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  ...
+spec:
+  selector:
+    matchLabels:
+      version: v2.1
+    matchExpressions:
+     - { key: tier, operator: In, values: [front, back]}
+```
+
+Deletando label via CLI
+```
+kubectl label pod [nome] [label]-(sinal de menos pra remover)
+```
+
+#### Anotações
+
+* Metadados descritivos sem a habilidade de fazer consultas.
+* São definidos na seção `metadata` do k8s Object Definition.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  annotations:
+    commit: 23eefj339
+    autor: 'João'
+    branch: 'feature/custom'
+spec:
+...
+```
+
+Olhar as anotações via `describe` do k8s
