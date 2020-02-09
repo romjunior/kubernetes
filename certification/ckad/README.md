@@ -670,3 +670,5 @@ A saída mostra a causa raiz?
 ```
 kubectl logs abc
 ```
+
+## Modulo 6: Pod Design
