@@ -771,3 +771,95 @@ spec:
 ```
 
 Olhar as anotações via `describe` do k8s
+
+#### Deployments
+
+* Adiciona recursos de *Scaling* e *Replication* a um conjunto de Pods.
+* Quando se cria um *Deployment*, é criado automáticamente um *ReplicaSet* no qual cuida da replicação.
+
+![Replica Sets](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/replica-sets.png)
+
+**Criando Deployment**
+
+Comando para executar(run) um deployment está *deprecated*, para criar você não pode especificar o comando `--restart=Never` se não ele cria um Pod.
+```
+kubectl run my-deploy --image=nginx [--replicas=3]
+```
+
+Maneira nova para se criar um Deployment
+```
+kubectl create deployment my-deploy --image=nginx --dry-run -o yaml > deploy.yaml
+
+nano deploy.yaml
+
+kubectl create -f deploy.yaml
+```
+
+Deployments em YAML
+```yaml
+apiVersion: v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-deploy
+  name: my-deploy
+spec:
+  replicas: 3 # numero de pods para executar
+  selector:
+    matchLabels:
+      app: my-deploy # pods que estejam como essa label
+  template: # aqui é como se fosse a definição do Pod, a estrutura é quase igual
+    metadata:
+      labels:
+        app: my-deploy #esse é o label dos Pods que vão executar
+    spec:
+      containers:
+       - image: nginx
+         name: nginx
+```
+
+Consultar deployments
+```
+kubectl get deployments
+```
+
+#### Replica Set
+
+* Automáticamente criado pelo Deployment, não foi feito para ser modificado.
+  *  listar: `kubectl get replicasets`
+  *  descrever: `kubectl describe deploy [name]`
+  * encontrar a replica: `kubectl describe replicasets [deploy-runtime-name]`
+
+Deployment usa *Rolling Update Strategy*, Vai em cada Pod e o atualiza, um por um.
+
+![Rolling Updates](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/rolling-updates.png)
+
+Desvantagens: Se possuir mudanças significativas que quebram as versões antigas, essa estratégia pode ser problemática.
+
+Podemos chegar o *Rollout History*
+```
+kubectl rollout history deployments my-deploy
+```
+
+Se quiser ver o que exatamente mudou entre os rollouts.
+```
+kubectl rollout history deployments my-deploy --revision=2
+```
+
+Rolling Back
+
+Esse é pra voltar pra versão anterior.
+```
+kubectl rollout undo deployments [deploy-name]
+```
+
+Voltar para algum versão(revision) específico.
+```
+kubectl rollout undo deployments [deploy-name] --to-revision=<número da revision>
+```
+
+ver o status do rollback
+```
+kubectl rollout status deployments [deploy-name]
+```
+
