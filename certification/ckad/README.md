@@ -863,3 +863,121 @@ ver o status do rollback
 kubectl rollout status deployments [deploy-name]
 ```
 
+**Escalando Deployments**
+
+Podemos fazer de dois jeitos:
+
+Manualmente, onde o # é o número desejado:
+```
+kubectl scale deployments [my-deploy] --replicas=#
+```
+
+Ou Automáticamente via porcentagem de recursos utilizados pelos pods(Horizontal Pod Autoscaler). 
+
+Exemplo utilização de CPU ultrapassar os 70%
+```
+kubectl autoscale deployments [my-deploy] --cpu-percent=70 --min=1 --max=10
+``` 
+
+Como consultar
+```
+kubectl get hpa [my-deploy]
+```
+
+### Pods vs. Jobs vs. CronJobs
+
+* Pods: processo "infinito"
+* Job: One-time process
+* CronJob: Periodic process
+
+**Job:** é completo quando o número específico de conclusões for alcançado, por padrão o número de conclusões é 1.
+
+Criar Jobs
+
+Imperativo(Depreciado):
+```
+kubectl run counter --image=nginx --restart=OnFailure -- 
+/bin/sh -c 'counter=0; while [ $counter -lt 3 ]; do counter=$((counter+1)); echo "$counter"; sleep 3; done;'
+```
+
+Declarativo:
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: counter
+spec:
+  completions: 1 ##número de conclusões a ser alcançados
+  parallelism: 1 ##se a task deve rodar em paralelo
+  backoffLimit: 6 ##quantas vezes nos tentamos até matar o job como falho
+  template:
+    spec:
+      restartPolicy: OnFailure ##Se dar restart no container ou no pod(OnFailure=restart no container dentro do Pod, Never=restart do Pod)
+      containers:
+       - args:
+         - /bin/sh
+         - -c
+         - ...
+        image: nginx
+        name: counter
+```
+
+Mista:
+```
+kubectl create job counter --image=nginx --dry-run -o yaml --
+/bin/sh -c 'counter=0; while [ $counter -lt 3 ]; do counter=$((counter+1)); echo "$counter" sleep 3; done;' > job.yaml
+
+kubectl create -f job.yaml
+```
+
+comandos do job:
+```
+
+kubectl get jobs ##lista os jobs
+
+kubectl get pods ##olhar os pods relacionados ao job
+
+```
+
+**CronJob:** tarefa que é executada em uma agenda específica
+
+`spec.schedule: "0 * * * *"`
+
+Criar CronJobs
+
+Imperativo(Depreciado):
+```
+kubectl run counter --image=nginx --restart=OnFailure --schedule="*/1 * * * *" ... 
+```
+
+Declarativo:
+```yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: counter
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never ##Se dar restart no container ou no pod(OnFailure=restart no container dentro do Pod, Never=restart do Pod)
+          containers:
+          - args:
+            - /bin/sh
+            - -c
+            - ...
+            image: nginx
+            name: counter
+```
+
+comandos do job:
+
+```
+
+kubectl get cronjobs ##lista os jobs
+
+kubectl get jobs --watch ##olha os jobs executando na agenda
+
+```
