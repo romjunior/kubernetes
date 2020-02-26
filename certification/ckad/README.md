@@ -983,3 +983,117 @@ kubectl get jobs --watch ##olha os jobs executando na agenda
 ```
 
 ## Modulo 7: Services and Networking
+
+### Services
+
+Habilita rede para acessar um conjunto de Pods. Ele utiliza os "label selectors" pra saber pra quais pods redirecionar as requisições.
+
+![Service Label Selectors](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/service-label-selectors.png)
+
+Criando Serviços:
+
+Imperativo(param expose):
+```
+kubectl run nginx --image=nginx --restart=Never --port=80 --expose
+```
+
+Ou se já possuir um deployments:
+```
+kubectl expose deploy [deploy-name] --target-port=80
+```
+
+Declarativo:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  selector:        ## determina quais pods serão redirecionadas as requisições
+    tier: frontend
+  ports:
+   - port: 3000    ##Mapeia a porta do pod para porta que vai receber a request
+     protocol: TCP
+     targetPort: 80
+  type: ClusterIP ##Especifica como expor o serviço.
+```
+
+![Incoming Traffic](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/incoming-traffic.png)
+
+Tipos de Serviços:
+
+  * ClusterIP: Expõe o serviço interno no cluster. Somente visível e comunicável dentro do cluster.
+  * NodePort: Expõe o serviço no IP de cada nó em uma porta estática. Acessível fora do cluster.
+  * LoadBalancer: Expõe o serviço utilizando um LoadBalancer.
+
+
+### Network Policies
+
+Controlam o tráfego de/para o Pod
+
+Network Policies Rules(NPC)
+
+  * Quais Pods a regra se aplica? Label Selectors
+  * Qual direção do tráfego? Quem está habilitado? tráfego vindo(Ingress), tráfego saindo(Egress)
+
+Criando NPC
+
+Declarativo: 
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      tier: backend
+  policyTypes:
+   - Ingress
+   - Egress
+  ingress:
+   - from:
+      ...
+  egress:
+    - to:
+      ...
+```
+
+OBS: Regra geral, negue acesso a todos os recursos e vá liberando a partir de necessidades. Existe um NPC que você pode aplicar para o k8s e ele negar para todos
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector: {} ##significa todos os pods
+  policyTypes:  ##entrada e saída bloqueia tudo
+   - Ingress
+   - Egress
+```
+
+OBS: Você pode selecionar por Namespace, Pod ou IP Address
+
+labels:
+```yaml
+...
+ingress:
+ - from:
+   - podSelector:
+       matchLabels:
+         tier: backend
+```
+
+Por portas(Portas são todas abertas por padrão):
+```yaml
+...
+ingress:
+ - from:
+   - podSelector:
+       matchLabels:
+         tier: backend
+   ports:
+    - protocol: TCP
+      port: 5432   ## estamos habilitando o tráfego nessa porta específica
+...
+```
