@@ -981,3 +981,5 @@ kubectl get cronjobs ##lista os jobs
 kubectl get jobs --watch ##olha os jobs executando na agenda
 
 ```
+
+## Modulo 7: Services and Networking
