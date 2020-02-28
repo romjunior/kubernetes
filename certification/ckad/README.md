@@ -1097,3 +1097,6 @@ ingress:
       port: 5432   ## estamos habilitando o tráfego nessa porta específica
 ...
 ```
+
+
+## Modulo 8: State Persistence
