@@ -6,6 +6,8 @@ metadata:
     app: mongodb
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: mongodb
@@ -23,7 +25,7 @@ spec:
            claimName: pvc-tz
       containers:
        - name: mongodb
-         image: mongo:3
+         image: mongo:4.2.7
          env:
           - name: MONGO_INITDB_ROOT_USERNAME
             valueFrom:
