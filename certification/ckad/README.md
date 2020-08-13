@@ -34,6 +34,47 @@ Pode usar o comando explain, ex:
 kubectl explain pods.spec
 ```
 
+Olhar todos os recursos da API:
+```
+kubectl api-resources
+```
+
+Olhar as versões das APIs:
+```
+kubectl api-versions
+```
+
+Descrever para que serve um recurso:
+```
+kubectl explain <resource-name>
+```
+
+Ver a config de contexto:
+```
+kubectl config view
+```
+
+Alterar o contexto no arquivo:
+```
+kubectl config set current-context <context-name>
+```
+
+Consultar o contexto atual:
+```
+kubectl config current-context
+```
+
+Saber se um usuário do k8s pode fazer algo:
+```
+kubectl auth can-i [coommand](ex: get pods)
+```
+
+Iniciar um proxy entra o client e o server para garantir a segurança(TLS) para fazer requisições direto no api-server
+```
+kubectl proxy --port 8001
+curl http://localhost:8001
+```
+
 ### Três Ferramentas importantes(Trinity of Tooling):
 
 * YAML
@@ -78,7 +119,7 @@ Gerenciamento imperativo de objetos
 
 * Rápido mas requer conhecimento detalhado, não há registro de rastreamento:
 
-create: criação de recursos, fornece o tipoe do objeto que deseja criar e o seu nome no final:
+create: criação de recursos, fornece o tipo e do objeto que deseja criar e o seu nome no final:
 ```
 kubectl create namespace ckad
 ```
@@ -204,6 +245,11 @@ kubectl exec <PodName> -it -- /bin/sh
 * Pode consultar um pod e conseguir mais informações:
 ```
 kubectl get po <PodName> -o wide
+```
+
+* Acessando Pods(port-forward):
+```
+kubectl port-forward pod/podName OuterPort:ContainerPort
 ```
 
 * Quando criar um pod, pode adicionar o `--rm` para deletar o pod quando estiver terminado
@@ -777,6 +823,10 @@ Olhar as anotações via `describe` do k8s
 * Adiciona recursos de *Scaling* e *Replication* a um conjunto de Pods.
 * Quando se cria um *Deployment*, é criado automáticamente um *ReplicaSet* no qual cuida da replicação.
 
+Labels = usado para adicionar
+Selector = usado para consultar as labels
+Annotations = usado somente para metadados(fins informativos)
+
 ![Replica Sets](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/replica-sets.png)
 
 **Criando Deployment**
@@ -793,6 +843,11 @@ kubectl create deployment my-deploy --image=nginx --dry-run -o yaml > deploy.yam
 nano deploy.yaml
 
 kubectl create -f deploy.yaml
+```
+
+Gerar yaml a partir de um deployment:
+```
+kubectl get deployments nginx --export -o yaml
 ```
 
 Deployments em YAML
@@ -822,6 +877,43 @@ Consultar deployments
 ```
 kubectl get deployments
 ```
+
+procurar por pods que possuam labels em específico.
+```
+kubectl get pods --selector='run=httpd'
+```
+
+adicionar uma label no deployment
+```
+kubectl label deployment [name] [key=value]
+```
+
+remover uma label no deployment
+```
+kubectl label deployment [name] [key]-
+```
+
+ver as labels do deployment
+```
+kubectl get deployments --show-labels
+```
+
+ver o histórico de rollout do deployment
+```
+kubectl rollout history deployment [name]
+```
+
+para fazer um rollout do deployment
+```
+kubectl rollout undo deployment [name]
+```
+
+Estratégias de updates:
+* Recreate: mata todos os pods e cria os novos, faz com que tenha uma indisponibilidade temporária.
+* RollingUpdate: atualiza um pod de cada vez, garante a disponibilidade.
+    * Tem opções para definir o min e o max de pods disponíveis.
+        * maxUnavailable: determina o número máximo de pods que são atualizados ao mesmo tempo.
+        * maxSurge: número de pod mínimos que rodam acima do limite para garantirem a disponibilidade.
 
 #### Replica Set
 
@@ -1002,6 +1094,11 @@ Ou se já possuir um deployments:
 kubectl expose deploy [deploy-name] --target-port=80
 ```
 
+Expose deployment.
+```
+kubectl expose deployment [name] --port=80 --type=NodePort  [--targetPort=80]
+```
+
 Declarativo:
 ```yaml
 apiVersion: v1
@@ -1025,7 +1122,18 @@ Tipos de Serviços:
   * ClusterIP: Expõe o serviço interno no cluster. Somente visível e comunicável dentro do cluster.
   * NodePort: Expõe o serviço no IP de cada nó em uma porta estática. Acessível fora do cluster.
   * LoadBalancer: Expõe o serviço utilizando um LoadBalancer.
+  * ExternalName: o objeto relativamente novo que funciona no DNS; redirecionamento funciona a partir do DNS.
+  * Service sem selector: usado para conexões diretas baseado no ip/port, sem um endpoint. útil para conexões a bancos e entre namespaces.
 
+#### Ingress
+
+* Ingress expõem rotas HTTP e HTTPs de fora para os serviços dentro do cluster
+* Roteamento de tráfego é controlado por regras definidas nos recursos do Ingress
+* Ingress pode ser configurado para fazer o seguinte:
+  * Dar aos serviços URLs externas acessíveis.
+  * Load Balance Traffic
+  * Terminate SSL/TLS
+  * Oferecer o nome baseado em virtual hosting
 
 ### Network Policies
 
@@ -1035,6 +1143,13 @@ Network Policies Rules(NPC)
 
   * Quais Pods a regra se aplica? Label Selectors
   * Qual direção do tráfego? Quem está habilitado? tráfego vindo(Ingress), tráfego saindo(Egress)
+
+  Policies
+  * por padrão, todos os pods podem acessar uns aos outros.
+  * isolamento de rede pode ser configurado para bloquear o tr[afego para os pods, executando eles em namespaces dedicados.
+  * NetworkPolicy pode ser usado para bloquear egress e ingress, e funciona como firewall
+  * Uso do NetworkPolicy depende do suporte do network provider; nem todos oferencem suporte, assim não surte efeito o Policy.
+  * Conexões são stateful por padrã, permitindo uma direção fo tráfego é o suficiente.
 
 Criando NPC
 
