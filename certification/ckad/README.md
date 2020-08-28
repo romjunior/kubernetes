@@ -15,29 +15,36 @@ Exercícios:
 
 Produtividade no Exame:
 
-defina um alias para o kubectl: alias k=kubectl
-configure o contexto e o namespace antes de executar os comandos para ter certeza que vai executar no lugar certo:
+Defina um alias para o kubectl: alias k=kubectl
+Configure o contexto e o namespace antes de executar os comandos para ter certeza que vai executar no lugar certo:
 
 kubectl config set-context --namespace=
 
 Utilize o nome dos recursos curtos:
 
-ns = namespaces
-pvc= persistentVolumeClaim
-pv = persistentVolume
-p = pods
-svc = service
+* ns = namespaces
+* pvc= persistentVolumeClaim
+* pv = persistentVolume
+* p = pods
+* svc = service
 
 Deleção de Objetos: não espere eles se excluírem de forma normal. Utilize a forma forçada:
+```
 kubectl delete pod nginx --grace-period=0 --force
+```
 
 Pode ser que no cluster que você esteja executando tenha objetos criados, use-os a seu favor, mas primeiro ache-os, grep é o seu amigo:
-
+```
 kubectl describe pods | grep -C 10 "author=John Doe"
+```
+No momento da prova só pode abrir o Kubernetes docs.
 
-No momento da prova só pode abrir o Kubernetes docs
 Pode utilizar o comando --help
-Pode usar o comando explain, ex: kubectl explain pods.spec
+
+Pode usar o comando explain, ex: 
+```
+kubectl explain pods.spec
+```
 
 Três Ferramentas importantes(Trinity os Tooling):
 
