@@ -4,14 +4,14 @@
 
 ### Currículo
 
-Requisitos: https://github.com/cncf/curriculum
-Info sobre a certificação: https://www.cncf.io/certification/ckad/
-GitHub do autor: https://github.com/bmuschko/ckad-prep
+* Requisitos: https://github.com/cncf/curriculum
+* Info sobre a certificação: https://www.cncf.io/certification/ckad/
+* GitHub do autor: https://github.com/bmuschko/ckad-prep
 
 Exercícios:
 
-https://github.com/dgkanatsios/CKAD-exercises
-https://github.com/nikhilagrawal577/ckad-notes
+* https://github.com/dgkanatsios/CKAD-exercises
+* https://github.com/nikhilagrawal577/ckad-notes
 
 Produtividade no Exame:
 
