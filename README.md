@@ -8,10 +8,14 @@ Contém as configurações de deploy de aplicações no kubernetes, seria a mont
 
 Versões de configs:
 
-[v1 - configuração simples, dois namespaces](https://github.com/romjunior/kubernetes/tree/master/apps-config/v1)
+[v1 - configuração simples, dois namespaces](apps-config/v1)
 
 ## K8s In Action
 
 Resumo e exemplos do retirados do livro **Kubernetes In Action** com explicações e comandos utilizados no Kubernetes (Em construção).
 
-[Link](https://github.com/romjunior/kubernetes/tree/master/k8s-in-action)
+[Link](k8s-in-action)
+
+## Certification CKAD
+
+Esse repositório também possui anotações sobre a certificação CKAD que podem ser utilizadas como base de estudo. [Link](certification/ckad)

@@ -1,5 +1,11 @@
 # Certified Kubernetes Application Developer (CKAD)
 
+## Introdução
+
+Esse é um guia de estudos da certificação do CKAD(Certified Kubernetes Application Developer) voltado para os desenvolvedores que utilizam o k8s para subir as suas aplicações.
+
+Esse guia foram anotações baseadas em um curso no [O'Reilly](https://learning.oreilly.com/learning-paths/learning-path-certified/9781492061021/) que aborda todos os tópicos incluindo alguns exercícios.
+
 ## Conteúdo
 * [Dicas para o Exame](dicas.md)
 * [Modulo 1: Básico](modulo1.md)
