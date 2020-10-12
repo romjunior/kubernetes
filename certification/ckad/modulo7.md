@@ -4,7 +4,7 @@
 
 Persiste os dados que ultrapassam os restarts do container
 
-![Volume Types](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/volume-types.png)
+![Volume Types](images/volume-types.png)
 
 Criando um Volume.
 
@@ -31,7 +31,7 @@ spec:
 
 Representam um armazenamento dentro do cluster do k8s. Sobrevivem ate se o container, Pod, Node ou k8s reiniciar
 
-![Persistent Volume](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/pv.png)
+![Persistent Volume](images/pv.png)
 
 Etapas para a criação do PersistentVolume
 

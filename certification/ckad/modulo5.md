@@ -108,7 +108,7 @@ Labels = usado para adicionar
 Selector = usado para consultar as labels
 Annotations = usado somente para metadados(fins informativos)
 
-![Replica Sets](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/replica-sets.png)
+![Replica Sets](images/replica-sets.png)
 
 **Criando Deployment**
 
@@ -205,7 +205,7 @@ Estratégias de updates:
 
 Deployment usa *Rolling Update Strategy*, Vai em cada Pod e o atualiza, um por um.
 
-![Rolling Updates](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/rolling-updates.png)
+![Rolling Updates](images/rolling-updates.png)
 
 Desvantagens: Se possuir mudanças significativas que quebram as versões antigas, essa estratégia pode ser problemática.
 

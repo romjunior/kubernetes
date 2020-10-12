@@ -4,7 +4,7 @@
 
 Habilita rede para acessar um conjunto de Pods. Ele utiliza os "label selectors" pra saber pra quais pods redirecionar as requisições.
 
-![Service Label Selectors](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/service-label-selectors.png)
+![Service Label Selectors](images/service-label-selectors.png)
 
 Criando Serviços:
 
@@ -39,7 +39,7 @@ spec:
   type: ClusterIP ##Especifica como expor o serviço.
 ```
 
-![Incoming Traffic](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/incoming-traffic.png)
+![Incoming Traffic](images/incoming-traffic.png)
 
 Tipos de Serviços:
 

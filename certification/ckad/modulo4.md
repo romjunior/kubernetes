@@ -17,7 +17,7 @@ Existem dois tipos de *Probes*
 
 Responde a pergunta: a aplicação está pronta para servir requests?
 
-![Readiness Probe](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/readiness-probe.png)
+![Readiness Probe](images/readiness-probe.png)
 
 
 HTTP Probes são muito úteis para aplicações web.
@@ -46,7 +46,7 @@ spec:
 
 Responde a pergunta: a aplicação está funcionando sem erros?
 
-![Liveness Probe](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/liveness-probe.png)
+![Liveness Probe](images/liveness-probe.png)
 
 Exemplo de Custom command para verificar os logs.
 ```yaml

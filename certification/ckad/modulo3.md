@@ -35,7 +35,7 @@ Patterns:
 
 Lógica de inicialização antes da aplicação principal iniciar.
 
-![Init Containers](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/init-containers.png)
+![Init Containers](images/init-containers.png)
 
 * eles separam responsabilidades provendo um ciclo de vida para inicialização e conclusão de tarefas diferentes da aplicação principal.
 * são esperados que os init containers sejam pequenos, executem rápidos e completem com sucesso.
@@ -81,7 +81,7 @@ spec:
 
 Melhorar a lógica da aplicação principal.
 
-![Sidecar Pattern](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/sidecar-pattern.png)
+![Sidecar Pattern](images/sidecar-pattern.png)
 
 Pod Sidecar ex:
 ```yaml
@@ -116,7 +116,7 @@ spec:
     name: git
 ```
 
-![Sidecar Example](https://github.com/romjunior/kubernetes/blob/master/certification/ckad/images/sidecar-example.png)
+![Sidecar Example](images/sidecar-example.png)
 
 O container principal geralmente é o primeiro que deve ser listado.
 
