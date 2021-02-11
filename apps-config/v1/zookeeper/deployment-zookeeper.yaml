@@ -23,7 +23,7 @@ spec:
            claimName: pvc-tz
       containers:
        - name: zookeeper
-         image: 192.168.1.180:30002/zookeeper:3-alpine
+         image: 192.168.1.180:30002/zookeeper:3.6.2-alpine
          imagePullPolicy: Always
          resources:
            requests:

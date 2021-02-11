@@ -27,7 +27,7 @@ spec:
            name: cm-file-kafka
       containers:
        - name: kafka
-         image: 192.168.1.180:30002/kafka:2-alpine
+         image: 192.168.1.180:30002/kafka:2.13-alpine
          imagePullPolicy: Always
          env:
           - name: CONFIGPATH
